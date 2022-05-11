@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test-nginx
+  name: nginx  #修改deployment的名称
+spec:
+  replicas: 2  #修改pod副本为两个
+  selector:
+    matchLabels:
+      app: my-tomcat-yaml
+  template:
+    metadata:
+      labels:
+        app: test-nginx
+    spec:
+      containers:
+        - image: nginx
+          name: nginx
+          resources: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: test-nginx
+  name: service-nginx  #修改service名称
+spec:
+  ports:
+    - port: 80  # service的虚拟ip对应的端口，在集群内网机器可以访问用service的虚拟ip加该端口号访问服务
+      nodePort: 30001  # service在宿主机上映射的外网访问端口，端口范围必须在30000-32767之间
+#      protocol: TCP
+      targetPort: 80  # pod暴露的端口，一般与pod内部容器暴露的端口一致
+  selector:
+    app: test-nginx
+  type: ClusterIP
+  kubectl create ns test
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: test-nginx
+  name: ingress-demo
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "demo.k8s.com"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                # 代理的服务名称
+                name: service-nginx
+                port:
+                  # 服务端口
+                  number: 8000
+
+
+

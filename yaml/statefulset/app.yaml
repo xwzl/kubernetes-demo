@@ -18,7 +18,7 @@ spec:
       # 定义容器，可以多个
       containers:
       - name: test-k8s # 容器名字
-        image: ccr.ccs.tencentyun.com/k8s-tutorial/test-k8s:v3-mongo # 镜像
+        image: registry.cn-hangzhou.aliyuncs.com/xuweizhi/test-app:1.0.1 # 镜像
       # 等待 mongodb 起来后才启动
       initContainers:
       - name: wait-mongo

@@ -14,8 +14,8 @@ spec:
         app: mongodb
     spec:
       containers:
-        - name: mongo
-          image: mongo:4.4
+        - name: mongo1
+          image: mongo
           # IfNotPresent 仅本地没有镜像时才远程拉，Always 永远都是从远程拉，Never 永远只用本地镜像，本地没有则报错
           imagePullPolicy: IfNotPresent
 ---
@@ -32,4 +32,4 @@ spec:
   ports:
     - port: 27017
       targetPort: 27017
-  
+
