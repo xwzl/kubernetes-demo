@@ -18,13 +18,20 @@ kubectl rollout undo deployment my-tomcat --to-revision  1
 kubectl get pod -o wide
 
 
+# 腾讯云安装
+wget https://nchc.dl.sourceforge.net/project/sshpass/sshpass/1.06/sshpass-1.06.tar.gz
+tar zxf sshpass-1.06.tar.gz
+cd sshpass-1.06
+./configure --prefix=/usr/local/
+make && make install
+
 wget https://cdn.jsdelivr.net/gh/lework/kainstall@master/kainstall-centos.sh
 
 https://github.com/lework/kainstall
 
 bash kainstall-centos.sh init \
-  --master 43.129.195.92 \
-  --worker 101.32.33.82,101.32.202.86\
+  --master 129.226.101.216 \
+  --worker 129.226.100.162,43.135.93.106\
   --user root \
   --password 158262751sb. \
   --port 22 \

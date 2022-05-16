@@ -6,7 +6,7 @@ metadata:
   # 部署名字
   name: test-k8s
 spec:
-  replicas: 5
+  replicas: 2
   # 用来查找关联的 Pod，所有标签都匹配才行
   selector:
     matchLabels:
@@ -21,3 +21,49 @@ spec:
       containers:
         - name: test-k8s # 容器名字
           image: registry.cn-hangzhou.aliyuncs.com/xuweizhi/test-app:1.0.0 # 镜像
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-k8s
+spec:
+  selector:
+    app: test-k8s
+  # 默认 ClusterIP 集群内可访问，NodePort 节点可访问，LoadBalancer 负载均衡模式（需要负载均衡器才可用）
+  type: NodePort
+  ports:
+    - port: 8080        # 本 Service 的端口
+      targetPort: 8080  # 容器端口
+      #      minikube 在容器中可以方位，curl test-k8s:31000
+      nodePort: 31000   #   节点端口，范围固定 30000 ~ 32767
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-demo
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: tomcat.cnsre.cn
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: test-k8s
+                port:
+                  number: 8080
+    - host: nginx1.com
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: test-k8s
+                port:
+                  number: 8080
