@@ -27,9 +27,14 @@ kubectl apply -f ingress-deploy.yaml
 ```shell
 # 端口
 kubectl get all -n ingress-nginx    
+
+# minikube 需要添加一下配置
 # 本地监听端口:8000
 # 容器端口:80
 kubectl port-forward service/ingress-nginx-controller 8000:80 -n ingress-nginx
+
+# tomcat.cnsre.cn:8000 即可访问成功
+curl 'Host:tomcat.cnsre.cn:8000' 127.0.0.1:8000
 
 # 或者在 k8s 容器中执行一下命令,ip 为 pod/ingress-nginx-controller IP 地址
 echo "10.96.180.95 tomcat.cnsre.cn" >> /etc/hosts
