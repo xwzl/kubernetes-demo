@@ -30,11 +30,11 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 
 service type 设置 NodePort
 
-```shell
 # kubectl get svc,可通过 nodeIp:nodePort 端口访问服务
 
+![](.README_images/8bd9ee73.png)
 
-```
+![](.README_images/84a78bb9.png)
 
 # 2 部署 ingress
 
