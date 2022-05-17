@@ -26,6 +26,16 @@ wget https://cdn.jsdelivr.net/gh/lework/kainstall@master/kainstall-centos.sh
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
 
+## 1.3 关于 service
+
+service type 设置 NodePort
+
+```shell
+# kubectl get svc,可通过 nodeIp:nodePort 端口访问服务
+
+
+```
+
 # 2 部署 ingress
 
 ## 2.1 安装 ingress
@@ -34,9 +44,8 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 
 https://github.com/kubernetes/ingress-nginx/tree/main/deploy/static/provider/baremetal
 
-国外源下载不下来，https://cr.console.aliyun.com/cn-hangzhou/instances/images?accounttraceid=77f6797a00534741a43f440f46eeb106tkhk 替换镜像源
-
-
+国外源下载不下来，https://cr.console.aliyun.com/cn-hangzhou/instances/images?accounttraceid=77f6797a00534741a43f440f46eeb106tkhk
+替换镜像源
 
 ## 2.2 minikube 安装方式
 
@@ -123,7 +132,111 @@ curl -H 'Host:nginx1.com' 127.0.0.1:32221
 
 ps: 生产域名绑定，就不用做映射了
 
-# 3. 查看服务
+# 3. 配置域名访问
+
+修改 /ingress/ingress-deploy.yaml ingress-nginx-controller
+
+```yaml
+apiVersion: apps/v1
+#kind: Deployment
+# 把 kind: Deployment 改为 kind: DaemonSet 模式，这样每台 node 上都有 ingress-nginx-controller pod 副本
+kind: DaemonSet
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.2.0
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  template:
+  spec:
+    hostNetwork: true # 新增 
+    containers:
+```
+
+重新部署
+
+```shell
+kubectl apply -f deploy.yaml
+kubectl get pods -n ingress-nginx -o wide
+# yum install yum install net-tools
+netstat -pntl | grep 443
+netstat -pntl | grep 80
+```
+
+## 3.1 生成证书
+
+ingress-nginx 配置 HTTPS 访问
+
+```shell
+#创建自签证书文件
+openssl req -x509 -nodes -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=nginx/O=nginx"
+
+#创建后会生成两个文件
+tls.crt tls.key
+
+#创建 secret
+kubectl create secret tls tls-secret --key tls.key --cert tls.crt
+
+#查看
+kubectl get secret
+```
+
+修改 tomcat-ingress yaml
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-demo
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  # 新增
+  tls:
+    - hosts:
+        - tomcat.cnsre.cn
+      secretName: tls-secret
+    - hosts:
+        - nginx1.com
+        secretName: tls-secret
+  rules:
+    - host: tomcat.cnsre.cn
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: tomcat-service-yaml
+                port:
+                  number: 8080
+    - host: nginx1.com
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: tomcat-service-yaml
+                port:
+                  number: 8080
+```
+
+访问
+
+    https://tomcat.cnsre.cn 或者 tomcat.cnsre.cn:46777
+
+![](.README_images/1eac5142.png)
+
+![](.README_images/62340e0c.png)
+
+![](.README_images/24afdb95.png)
+
+# 4. 查看服务
 
 查看 service/ingress-nginx-controller 端口,配置域名，通过 kubectl get all -n ingress-nginx 端口访问
 
