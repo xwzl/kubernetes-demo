@@ -75,5 +75,4 @@ kubectl describe secret $TOKENS -n kube-system | grep "token:" | awk '{ print $2
 
 ```
 sh dashboard-token.sh
-
 ```

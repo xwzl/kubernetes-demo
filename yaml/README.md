@@ -5,3 +5,6 @@
 - https: ingress/ingress-nginx 配置 https ingress-nginx , http 和 https 都能访问
 - http: service/ingress-nginx 普通，通过 nodeIp:nodePort(ingress-nginx-controller)  访问，https 不能访问
 
+# harbor 
+
+test 158262751sB.
