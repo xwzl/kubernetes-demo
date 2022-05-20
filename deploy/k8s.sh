@@ -30,10 +30,10 @@ wget https://cdn.jsdelivr.net/gh/lework/kainstall@master/kainstall-centos.sh
 https://github.com/lework/kainstall
 
 bash kainstall-centos.sh init \
-  --master 129.226.101.216 \
-  --worker 129.226.100.162,43.135.93.106\
+  --master 192.168.2.135 \
+  --worker 192.168.2.130,192.168.2.131\
   --user root \
-  --password 158262751sb. \
+  --password root \
   --port 22 \
   --version 1.20.6
 
