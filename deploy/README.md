@@ -247,3 +247,12 @@ spec:
 ![](.README_images/a00eff03.png)
 
 ![](.README_images/1..png)
+
+# 6. 安装 jenkins 
+
+安装 jenkins
+
+    -v /var/jenkins_mount:/var/jenkins_home
+    docker run -d -p 10240:8080 -p 10241:50000 -v /etc/localtime:/etc/localtime --name myjenkins jenkins/jenkins
+打印初始化密码
+    sudo docker exec ${CONTAINER_ID or CONTAINER_NAME} cat /var/jenkins_home/secrets/initialAdminPassword
