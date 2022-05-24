@@ -20,7 +20,10 @@ spec:
       containers:
         - image: tomcat:7.0.75-alpine
           name: tomcat
-          resources: {}
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "500Mi"
 
 ---
 apiVersion: v1
