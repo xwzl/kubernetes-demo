@@ -9,7 +9,7 @@ echo "deploying ... name:${name},iamge:${image},host:${HOST},expose_port:${expos
 
 rm -f spring-boot.yaml
 
-if [ ${ENABLE_INGRESS} ]; then
+if [ "${ENABLE_INGRESS}" == "true" ]; then
   cp "${BUILD_DIR}"/kubernetes-demo/yaml/jenkins/spring-boot-ingress.yaml ./spring-boot.yaml
 else
   cp "${BUILD_DIR}"/kubernetes-demo/yaml/jenkins/spring-boot.yaml ./spring-boot.yaml
@@ -28,7 +28,7 @@ generation=0
 # shellcheck disable=SC2126
 # shellcheck disable=SC2046
 if [ $(kubectl get deploy | grep "${JOB_NAME}" | wc -l) -gt 0 ]; then
-  generation=$(kubectl get deploy demo -o go-template='{{.metadata.generation}}')
+  generation=$(kubectl get deploy ${JOB_NAME} -o go-template='{{.metadata.generation}}')
 fi
 kubectl apply -f spring-boot.yaml
 
@@ -40,13 +40,15 @@ cat spring-boot.yaml
 function check::deploy() {
   # 健康检查时可能当前部署没有成功，因此比较前后两次部署版本好
   # shellcheck disable=SC2160
-  while [ true ]; do
+  count1=10
+  while [ $count1 -gt 0 ]; do
     current_generation=$(kubectl get deploy demo -o go-template='{{.metadata.generation}}')
-    echo "deploy is deploying"
+    echo "deploy is deploying,current_version:$current_generation,old_version:$generation"
     if [ ${current_generation} -gt ${generation} ]; then
       echo "deploy is ready"
       break
     fi
+    ((count1--))
     sleep 2
   done
 }

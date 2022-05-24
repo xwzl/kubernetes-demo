@@ -15,6 +15,46 @@ ps: 本地有 docker、jdk、mvn、kubetcl 环境
 
 # 2. 创建一个 Job 流水线
 
+新建 item
+
+![](.images/9ca1740f.png)
+
+选择流水线
+
+![](.images/57a22cc8.png)
+
+复制下面的编排脚本到流水线中
+
+![](.images/b9e9dd88.png)
+
+
+
+需要注意的点,以下的参数要随之修改：
+- WORK_SPACE: demo 改为相应的 item name
+- JAR_NAME: 不用换修改
+- MODULE: 打包的模块路径必须修改
+- EXPOSE_PORT: 暴露端口与服务端口一直即可
+- HOST: 目前服务通过暴露域名的方式启动
+  - PATH: 待实现
+  - ENABLE_INGRESS: 配套使用
+- settings.xml: 找我要
+
+本机包含证书的，先创建证书
+```shell
+#创建自签证书文件
+openssl req -x509 -nodes -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=nginx/O=nginx"
+
+#创建后会生成两个文件
+tls.crt tls.key
+
+#创建 secret
+kubectl create secret tls tls-secret --key tls.key --cert tls.crt
+
+#查看
+kubectl get secret
+```
+然后把当前目录下文件和脚本拷贝到 /opt/jenkins 中
+
 ```
 node {
     

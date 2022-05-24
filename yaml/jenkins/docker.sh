@@ -18,7 +18,7 @@ JENKINS_DIR=${WORK_SPACE}/${MODULE}
 
 echo "jenkins workspace: ${JENKINS_DIR}"
 
-if [ ! -f "${JENKINS_DIR}/target/${JAR_NAME}" ]; then
+if [ ! -d "${JENKINS_DIR}/target" ]; then
   echo "target jar file not found ${JENKINS_DIR}/target/${JAR_NAME}"
   exit 1
 fi
@@ -40,7 +40,7 @@ function build::image() {
 
   cd "${DOCKER_DIR}" || rm -rf *
 
-  mv "${JENKINS_DIR}"/target/${JAR_NAME} "${DOCKER_DIR}"
+  cp "${JENKINS_DIR}"/target/*.jar "${DOCKER_DIR}"
   IMAGE_NAME=${DOCKER_REGISTER_URL}/"${JOB_NAME}":"${VERSION}"
 
   echo "building image:${IMAGE_NAME}"
