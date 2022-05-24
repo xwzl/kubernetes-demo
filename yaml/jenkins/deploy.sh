@@ -42,7 +42,7 @@ function check::deploy() {
   # shellcheck disable=SC2160
   count1=10
   while [ $count1 -gt 0 ]; do
-    current_generation=$(kubectl get deploy demo -o go-template='{{.metadata.generation}}')
+    current_generation=$(kubectl get deploy ${JOB_NAME} -o go-template='{{.metadata.generation}}')
     echo "deploy is deploying,current_version:$current_generation,old_version:$generation"
     if [ ${current_generation} -gt ${generation} ]; then
       echo "deploy is ready"
