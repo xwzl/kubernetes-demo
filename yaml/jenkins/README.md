@@ -307,34 +307,34 @@ hbos-ncc
 
 - ENABLE_DOCKER_PUSH: 改为 false 镜像不要上传
 ```shell
- node {
+  node {
     
     def mvnHome
     
     // jenkins 目录地址，必须机器的地址配置
-    env.WORK_SPACE='/Users/xuweizhi/.jenkins/workspace/demo'
+    env.WORK_SPACE='/Users/xuweizhi/.jenkins/workspace/hbos-ncc'
     // 打包后的 jar 名称，不相同需要设置，并修改 Dockerfile 的 copy 名称 
     env.JAR_NAME="app-1.0.0.jar"
     // ingress 监听的域名
-    env.HOST="tomcat.cnsre.cn"
+    env.HOST="demo.spring-boot.com"
     // 容器暴露端口
     env.EXPOSE_PORT="8080";
     // docker build 基础路径
     env.BUILD_DIR='/Users/xuweizhi/Documents/build-workspace'
     // 项目中模块的地址
-    env.MODULE="java/interview"
+    env.MODULE="hbos-ncc-starter"
     // xml 配置
-    env.MAVEN_CONFIG_PATH="/Users/xuweizhi/.m2/settings2.xml"
+    env.MAVEN_CONFIG_PATH="/Users/xuweizhi/.m2/settings1.xml"
     // docker 镜像仓库地址
     env.DOCKER_REGISTER_URL="registry.cn-hangzhou.aliyuncs.com/xuweizhi"
     // 是否开启 ingress
     env.ENABLE_INGRESS="true"
     // 是否 push docker image
-    env.ENABLE_DOCKER_PUSH="true"
+    env.ENABLE_DOCKER_PUSH="false"
     // 下载项目
     stage('download project') {
         // 项目配置地址
-        git 'https://gitee.com/xuweizhi/summary.git'
+        git ''
     }
     
     // mvn 打包
@@ -342,7 +342,7 @@ hbos-ncc
         // 配置 zsh 必须执行该命令
         sh 'source ~/.bash_profile'
         // dubbo 模块需要打包父模块,需要手动更改
-        sh 'mvn clean install -pl ${MODULE} -amd -s ${MAVEN_CONFIG_PATH} -Dmaven.test.skip=true -P rdc'
+        sh 'mvn clean install -s ${MAVEN_CONFIG_PATH} -DskipTests=true'
     }
     
     // 制作镜像并上传
@@ -357,4 +357,5 @@ hbos-ncc
     }
 
 }
+
 ```
