@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM java:8
 
 ENV DEFAULT_WORK_DIR=/opt/java
 
