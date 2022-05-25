@@ -187,7 +187,9 @@ ps: 本地有 docker、jdk、mvn、kubetcl 环境
 
 ### linux or mac
 
-三个文件必须改变
+docker 镜像仓库需要登录
+
+需要修改的点
 
 - WORK_SPACE: jenkins 工作目录
 - BUILD_DIR: docker 构建镜像目录
