@@ -49,13 +49,13 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   # 新增
-#  tls:
-#    - hosts:
-#        - tomcat.cnsre.cn
-#      secretName: tls-secret
-#    - hosts:
-#        - nginx1.com
-#        secretName: tls-secret
+  tls:
+    - hosts:
+        - tomcat.cnsre.cn
+      secretName: tls-secret
+    - hosts:
+        - nginx1.com
+      secretName: tls-secret
   rules:
     - host: tomcat.cnsre.cn
       http:
