@@ -1,4 +1,4 @@
-FROM arm64v8/openjdk:8-jdk-oraclelinux7
+FROM openjdk:8-jre-alpine
 
 ENV DEFAULT_WORK_DIR=/opt/java
 
