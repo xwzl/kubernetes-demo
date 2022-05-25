@@ -32,7 +32,7 @@ function copy::dockerfile() {
     git clone https://gitee.com/xuweizhi/kubernetes-demo.git
   else
     cd ${BUILD_DIR}/kubernetes-demo
-    git pull master
+    git pull
   fi
 
   cp "${BUILD_DIR}"/kubernetes-demo/yaml/jenkins/Dockerfile "${DOCKER_DIR}"
