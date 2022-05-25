@@ -30,6 +30,9 @@ generation=0
 if [ $(kubectl get deploy | grep "${JOB_NAME}" | wc -l) -gt 0 ]; then
   generation=$(kubectl get deploy ${JOB_NAME} -o go-template='{{.metadata.generation}}')
 fi
+
+kubectl delete -f spring-boot.yaml
+
 kubectl apply -f spring-boot.yaml
 
 echo "apply ok"
