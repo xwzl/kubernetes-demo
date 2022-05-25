@@ -52,7 +52,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
-  # 没有证书，请关闭
   tls:
     - hosts:
         - {{.host}}
