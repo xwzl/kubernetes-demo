@@ -9,13 +9,17 @@ spec:
   selector:
     matchLabels:
       app: spring-boot
+#    matchExpressions:
+#      # 选择标签
+#      - { key: group, operator: In, value: [ dev, test ] }
   template:
     metadata:
       labels:
+        group: dev
         app: spring-boot
     spec:
       containers:
-        - image: registry.cn-hangzhou.aliyuncs.com/xuweizhi/app:1.0.0
+        - image: registry.cn-hangzhou.aliyuncs.com/xuweizhi/demo:20220525230607
           name: spring-boot
           ports:
             - containerPort: 8080
