@@ -19,17 +19,17 @@ spec:
           name: {{.name}}
           ports:
             - containerPort: {{.expose_port}}
-          resources:
-            # cup 与 memory 的区别：memory 和 cpu requests 不满足时无法启动
-            # 当资源不够时， cpu 会根据配置权重分配 cpu 核心数，memory 不足时停止容器
-            # cpu: 1024m 算一核，100m 0.1 核心
-            requests:
-              cpu: "100m"
-              memory: "200Mi"
-            # limits 申请不够时可以启动，requests 无法启动
-            limits:
-              cpu: "100m"
-              memory: "200Mi"
+#          resources:
+#            # cup 与 memory 的区别：memory 和 cpu requests 不满足时无法启动
+#            # 当资源不够时， cpu 会根据配置权重分配 cpu 核心数，memory 不足时停止容器
+#            # cpu: 1024m 算一核，100m 0.1 核心
+#            requests:
+#              cpu: "100m"
+#              memory: "200Mi"
+#            # limits 申请不够时可以启动，requests 无法启动
+#            limits:
+#              cpu: "100m"
+#              memory: "200Mi"
 ---
 apiVersion: v1
 kind: Service
