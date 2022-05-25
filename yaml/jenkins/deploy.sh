@@ -61,7 +61,7 @@ function check::health() {
 
   while [ $count -gt 0 ]; do
 
-    replicas=$(kubectl get deploy demo -o go-template='{{.status.replicas}},{{.status.updatedReplicas}},{{.status.readyReplicas}},{{.status.availableReplicas}}')
+    replicas=$(kubectl get deploy ${JOB_NAME} -o go-template='{{.status.replicas}},{{.status.updatedReplicas}},{{.status.readyReplicas}},{{.status.availableReplicas}}')
 
     echo "replicas:${replicas}"
     # shellcheck disable=SC2206
