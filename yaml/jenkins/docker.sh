@@ -48,8 +48,10 @@ function build::image() {
 
   echo "building image:${IMAGE_NAME}"
   docker build --build-arg EXPOSE_PORT=${EXPOSE_PORT} -t ${IMAGE_NAME} .
-  echo "${IMAGE_NAME}" > ${WORK_SPACE}/IMAGE
-  docker push ${IMAGE_NAME}
+  echo "${IMAGE_NAME}" >${WORK_SPACE}/IMAGE
+  if [ "${ENABLE_DOCKER_PUSH}" == "true" ]; then
+    docker push "${IMAGE_NAME}"
+  fi
 }
 
 build::image

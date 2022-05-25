@@ -219,6 +219,8 @@ node {
     env.DOCKER_REGISTER_URL="registry.cn-hangzhou.aliyuncs.com/xuweizhi"
     // 是否开启 ingress
     env.ENABLE_INGRESS="true"
+    // 是否 push docker image
+    env.ENABLE_DOCKER_PUSH="true"
     // 下载项目
     stage('download project') {
         // 项目配置地址
@@ -271,6 +273,8 @@ mac
     env.DOCKER_REGISTER_URL="registry.cn-hangzhou.aliyuncs.com/xuweizhi"
     // 是否开启 ingress
     env.ENABLE_INGRESS="true"
+    // 是否 push docker image
+    env.ENABLE_DOCKER_PUSH="true"
     // 下载项目
     stage('download project') {
         // 项目配置地址
@@ -301,6 +305,7 @@ mac
 
 hbos-ncc
 
+- ENABLE_DOCKER_PUSH: 改为 false 镜像不要上传
 ```shell
  node {
     
@@ -324,6 +329,8 @@ hbos-ncc
     env.DOCKER_REGISTER_URL="registry.cn-hangzhou.aliyuncs.com/xuweizhi"
     // 是否开启 ingress
     env.ENABLE_INGRESS="true"
+    // 是否 push docker image
+    env.ENABLE_DOCKER_PUSH="true"
     // 下载项目
     stage('download project') {
         // 项目配置地址
