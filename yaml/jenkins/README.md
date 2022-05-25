@@ -71,6 +71,8 @@ kubectl get pods -o wide
 minikube 直接安装 ingress-nginx
 
 ```shell
+# 删除原来的 ingres-nginx,删除 ingress-nginx 验证时间比较长，需要耐心等待 2-5 分钟左右
+kubectl delete -f yaml/demo/service/ingress-deploy.yaml
 # 启用 ingress
 minikube addons enable ingress
 # 禁用 ingress
