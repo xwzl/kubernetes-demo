@@ -30,6 +30,9 @@ function copy::dockerfile() {
   if [ ! -d "${BUILD_DIR}/kubernetes-demo" ]; then
     cd ${BUILD_DIR}
     git clone https://gitee.com/xuweizhi/kubernetes-demo.git
+  else
+    cd ${BUILD_DIR}/kubernetes-demo
+    git pull master
   fi
 
   cp "${BUILD_DIR}"/kubernetes-demo/yaml/jenkins/Dockerfile "${DOCKER_DIR}"

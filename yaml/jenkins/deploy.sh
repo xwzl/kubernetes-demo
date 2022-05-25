@@ -15,10 +15,10 @@ else
   cp "${BUILD_DIR}"/kubernetes-demo/yaml/jenkins/spring-boot.yaml ./spring-boot.yaml
 fi
 
-sed -i "s,{{.name}},${name},g" spring-boot.yaml
-sed -i "s,{{.image}},${image},g" spring-boot.yaml
-sed -i "s,{{.host}},${host},g" spring-boot.yaml
-sed -i "s,{{.expose_port}},${expose_port},g" spring-boot.yaml
+sed -i "" "s,{{.name}},${name},g" spring-boot.yaml
+sed -i "" "s,{{.image}},${image},g" spring-boot.yaml
+sed -i "" "s,{{.host}},${host},g" spring-boot.yaml
+sed -i "" "s,{{.expose_port}},${expose_port},g" spring-boot.yaml
 
 echo "ready to apply"
 

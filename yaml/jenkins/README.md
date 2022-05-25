@@ -191,7 +191,7 @@ docker 镜像仓库需要登录
 
 需要修改的点
 
-- WORK_SPACE: jenkins 工作目录
+- WORK_SPACE: jenkins 工作目录 /root/.jenkins/workspace/ + job Name
 - BUILD_DIR: docker 构建镜像目录
 - MAVEN_CONFIG_PATH: maven 配置文件目录，我项目
 - stage('mvn install'): 具体的打包命令，根据项目来更改
@@ -297,5 +297,57 @@ mac
     }
 
 }
+```
 
+hbos-ncc
+
+```shell
+ node {
+    
+    def mvnHome
+    
+    // jenkins 目录地址，必须机器的地址配置
+    env.WORK_SPACE='/Users/xuweizhi/.jenkins/workspace/demo'
+    // 打包后的 jar 名称，不相同需要设置，并修改 Dockerfile 的 copy 名称 
+    env.JAR_NAME="app-1.0.0.jar"
+    // ingress 监听的域名
+    env.HOST="tomcat.cnsre.cn"
+    // 容器暴露端口
+    env.EXPOSE_PORT="8080";
+    // docker build 基础路径
+    env.BUILD_DIR='/Users/xuweizhi/Documents/build-workspace'
+    // 项目中模块的地址
+    env.MODULE="java/interview"
+    // xml 配置
+    env.MAVEN_CONFIG_PATH="/Users/xuweizhi/.m2/settings2.xml"
+    // docker 镜像仓库地址
+    env.DOCKER_REGISTER_URL="registry.cn-hangzhou.aliyuncs.com/xuweizhi"
+    // 是否开启 ingress
+    env.ENABLE_INGRESS="true"
+    // 下载项目
+    stage('download project') {
+        // 项目配置地址
+        git 'https://gitee.com/xuweizhi/summary.git'
+    }
+    
+    // mvn 打包
+    stage('mvn install') {
+        // 配置 zsh 必须执行该命令
+        sh 'source ~/.bash_profile'
+        // dubbo 模块需要打包父模块,需要手动更改
+        sh 'mvn clean install -pl ${MODULE} -amd -s ${MAVEN_CONFIG_PATH} -Dmaven.test.skip=true -P rdc'
+    }
+    
+    // 制作镜像并上传
+    stage('docker build') {
+        // 此处要登录一下 docker login 仓库否则 push 失败
+        sh 'bash /Users/xuweizhi/Documents/root/kubernets/yaml/jenkins/docker.sh'
+    }
+    
+    // 不需要 ingress 要注释一下模板，位于 /op/build-workspace/kubernetes-demo/yaml/spring-boot.yaml
+    stage('kubernetes deploy') {
+        sh 'bash /Users/xuweizhi/Documents/root/kubernets/yaml/jenkins/deploy.sh'
+    }
+
+}
 ```
