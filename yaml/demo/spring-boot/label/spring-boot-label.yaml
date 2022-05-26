@@ -9,39 +9,36 @@ spec:
   selector:
     matchLabels:
       app: spring-boot
-#    matchExpressions:
-#      # 选择标签
-#      - { key: group, operator: In, value: [ dev, test ] }
   template:
     metadata:
       labels:
-        group: dev
         app: spring-boot
     spec:
+      #      nodeSelector:
+      #        node: node1
       containers:
         - image: registry.cn-hangzhou.aliyuncs.com/xuweizhi/demo:20220525230607
           name: spring-boot
           ports:
             - containerPort: 8080
-          # 健康检查进程存活探针,不存在重启 pod
-          livenessProbe:
-            tcpSocket:
-                port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            failureThreshold: 2
-            successThreshold: 1
-            timeoutSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /hello/printIpAddress
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            failureThreshold: 2
-            successThreshold: 1
-            timeoutSeconds: 5
+      affinity:
+        # 节点优选策略
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: node
+                    operator: NotIn
+                    values:
+                      - node1
 ---
 apiVersion: v1
 kind: Service

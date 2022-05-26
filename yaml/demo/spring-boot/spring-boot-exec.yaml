@@ -9,9 +9,9 @@ spec:
   selector:
     matchLabels:
       app: spring-boot
-#    matchExpressions:
-#      # 选择标签
-#      - { key: group, operator: In, value: [ dev, test ] }
+  #    matchExpressions:
+  #      # 选择标签
+  #      - { key: group, operator: In, value: [ dev, test ] }
   template:
     metadata:
       labels:
@@ -25,8 +25,11 @@ spec:
             - containerPort: 8080
           # 健康检查进程存活探针,不存在重启 pod
           livenessProbe:
-            tcpSocket:
-                port: 8080
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - ps -ef|grep java|grep -v grep
             initialDelaySeconds: 10
             periodSeconds: 10
             failureThreshold: 2

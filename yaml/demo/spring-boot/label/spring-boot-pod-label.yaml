@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: spring-boot
+  name: spring-boot
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spring-boot
+  template:
+    metadata:
+      labels:
+        app: spring-boot
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/xuweizhi/demo:20220525230607
+          name: spring-boot
+          ports:
+            - containerPort: 8080
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - my-tomcat-yaml
+              topologyKey: kubernetes.io/hostname
+
+#          preferredDuringSchedulingIgnoredDuringExecution:
+#            - weight: 100
+#              podAffinityTerm:
+#                 labelSelector:
+#                    matchExpressions:
+#                      - key: app
+#                        operator: In
+#                        values:
+#                          - my-tomcat-yaml
+#                topologyKey: kubernetes.io/hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: spring-boot
+  name: spring-boot  #修改service名称
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: spring-boot
+  type: ClusterIP
