@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: spring-boot
+  name: spring-boot
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spring-boot
+  template:
+    metadata:
+      labels:
+        app: spring-boot
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/xuweizhi/demo:20220525230607
+          name: spring-boot
+          ports:
+            - containerPort: 8080
+          lifecycle:
+            postStart:
+              exec:
+                command: [ "/bin/bash","-c","echo web starting ... >> /var/log/messages" ]
+            preStop:
+              exec:
+                command: [ "bin/bash","-c","echo web stopping ... >> /var/log/messages && sleep 2" ]

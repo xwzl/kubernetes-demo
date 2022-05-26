@@ -78,3 +78,8 @@ apply/spring-boot-blue-green.yaml
 ## 4.4 金丝雀部署
 
 apply/spring-boot-blue-green.yaml service version 标签去掉，多个版本的服务都可以访问
+
+# 5. 进入容器内部
+sh 可以进去
+
+    kubectl exec -it pod/spring-boot-74f6975bd6-5rnv7 -- sh

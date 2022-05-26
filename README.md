@@ -65,3 +65,5 @@ node {
 
 }
 ```
+进入容器内部
+    kubectl exec -it pod/spring-boot-74f6975bd6-5rnv7 -- sh
